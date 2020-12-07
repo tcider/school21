@@ -1,0 +1,6 @@
+buffer - 10
+line - 'First sentence short' ret - 1
+line - 'Second morrrrrrrrrrrrrrrrrrrrre longggggggggggggggg' ret - 1
+line - 'Third maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaxxxxxx long without new line' ret - 1
+line - '' ret - 0
+After
