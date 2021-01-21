@@ -1,0 +1,32 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ft_server                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tcider <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/01/20 13:08:06 by tcider            #+#    #+#              #
+#    Updated: 2021/01/20 19:23:04 by tcider           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+server {
+	listen 80;
+	listen [::]:80;
+	listen 443;
+	listen [::]:443;
+	ssl on;
+	ssl_certificate_key /etc/ssl/private/localhost.key;
+	ssl_certificate /etc/ssl/certs/localhost.crt;
+	root /var/www/wordpress;
+	index index.php index.html;
+	server_name localhost www.localhost 127.0.0.1;
+	location / {
+		autoindex on;
+		try_files $uri $uri/ =404;
+	}
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+	}
+}
