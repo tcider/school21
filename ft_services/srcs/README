@@ -1,0 +1,7 @@
+All common parameters of claster passed in "config.yaml":
+
+1) IP and PORTs data are translated in configMap, if you want
+to change them you should also go thru corresponding *.yaml and Dockerfile's
+
+2) Logins and passwords translated in Secret, it's enough to change 
+them only there.

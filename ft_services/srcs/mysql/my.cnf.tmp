@@ -1,0 +1,12 @@
+[mysqld]
+user = ${MYSQL_USER}
+port = ${MYSQL_PORT}
+bind-address = 0.0.0.0
+socket=/var/lib/mysql/mysql.sock
+datadir = /var/lib/mysql
+
+[mysql]
+user = ${MYSQL_USER}
+password = ${MYSQL_PASW}
+port = ${MYSQL_PORT}
+socket=/var/lib/mysql/mysql.sock

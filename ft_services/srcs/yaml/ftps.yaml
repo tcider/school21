@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps-service
+  labels:
+    app: ftps
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+spec:
+  type: LoadBalancer
+  selector:
+    app: ftps
+  ports:
+  - name: ftps-connect
+    port: 21
+    targetPort: 21
+  - name: ftps-transfer
+    port: 20
+    targetPort: 20
+  - name: ftps-pas
+    port: 21000
+    targetPort: 21000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ftps-vol-claim
+  labels:
+    app: ftps
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps-deployment
+  labels:
+    app: ftps
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftps
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      containers:
+      - name: ftps-container
+        image: ftps-image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 21
+          name: ftps-connect
+        - containerPort: 20
+          name: ftps-transfer
+        - containerPort: 21000
+          name: ftps-pas
+        env:
+        - name: IP
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: ip
+        - name: FTPS_PORT_PAS
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: ftps_port_pas
+        - name: FTPS_USER
+          valueFrom:
+            secretKeyRef:
+              name: global-secret
+              key: ftps_user
+        - name: FTPS_PASW
+          valueFrom:
+            secretKeyRef:
+              name: global-secret
+              key: ftps_pasw
+        volumeMounts:
+        - name: ftps-vol
+          mountPath: /ftps
+      volumes:
+      - name: ftps-vol
+        persistentVolumeClaim:
+          claimName: ftps-vol-claim

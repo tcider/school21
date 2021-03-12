@@ -1,0 +1,14 @@
+server {
+	listen ${PMA_PORT};
+	listen [::]:${PMA_PORT};
+	root /usr/share/phpmyadmin;
+	index index.php;
+	location ~ \.php {
+		fastcgi_pass	127.0.0.1:9000;
+		fastcgi_index	index.php;
+		include 		fastcgi.conf;
+	}
+	location / {
+		try_files $uri $uri/ =404;
+	}
+}

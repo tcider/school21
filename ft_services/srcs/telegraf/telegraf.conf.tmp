@@ -1,0 +1,36 @@
+[agent]
+  interval = "10s"
+  round_interval = true
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  collection_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "0s"
+  precision = ""
+  hostname = ""
+  omit_hostname = false
+###############################################################################
+#                            OUTPUT PLUGINS                                   #
+###############################################################################
+# Configuration for sending metrics to InfluxDB
+[[outputs.influxdb]]
+## The full HTTP or UDP URL for your InfluxDB instance.
+  urls = ["http://influxdb-service:${INFLUX_PORT}"]
+  database = "telegraf"
+  username = "${INFLUX_USER}"
+  password = "${INFLUX_PASW}"
+###############################################################################
+#                            INPUT PLUGINS                                    #
+###############################################################################
+[[inputs.docker]]
+  endpoint = "unix:///var/run/docker.sock"
+  gather_services = false
+  container_name_include = []
+  perdevice = true
+  total = true
+## docker labels to include and exclude as tags.  Globs accepted.
+## Note that an empty array for both will include all labels as tags
+  docker_label_include = []
+  docker_label_exclude = []
+## Which environment variables should we use as a tag
+  tag_env = ["JAVA_HOME", "HEAP_SIZE"]

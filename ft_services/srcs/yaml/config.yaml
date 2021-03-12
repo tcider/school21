@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-config
+  namespace: default
+data:
+  ip: 192.168.99.100
+  pma_port: "5000"
+  wp_port: "5050"
+  mysql_port: "3306"
+  ftps_port_pas: "21000"
+  influx_port: "8086"
+  grafana_port: "3000"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: global-secret
+  namespace: default
+type: Opaque
+stringData:
+  ssh_user: "admin"
+  ssh_pasw: "admin"
+  mysql_user: "root"
+  mysql_pasw: "root"
+  ftps_user: "admin"
+  ftps_pasw: "admin"
+  influx_user: "admin"
+  influx_pasw: "admin"
+  grafana_user: "admin"
+  grafana_pasw: "Admin1234"
